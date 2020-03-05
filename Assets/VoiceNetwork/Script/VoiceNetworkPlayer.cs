@@ -70,6 +70,8 @@ namespace VoiceNetwork
 
         private void Update()
         {
+            if (!isLocalPlayer) return;
+
             StartVoiceRecord();
             CmsSendSimpleComment();
         }
