@@ -42,6 +42,22 @@ namespace VoiceNetwork
             playoutAudioSource.Play();
         }
 
+        [Command]
+        public void CmsSendSimpleComment()
+        {
+
+            RpcReceiveHello("Hello from" + ((netIdentity.isServer) ? "Server" : "Client"));
+        }
+
+        [ClientRpc]
+        public void RpcReceiveHello(string SayHello)
+        {
+            if (!isLocalPlayer)
+            {
+                Debug.Log(SayHello);
+            }
+        }
+
         private void StartVoiceRecord()
         {
             if (!isMicAvailable) return;
@@ -56,6 +72,7 @@ namespace VoiceNetwork
         private void Update()
         {
             StartVoiceRecord();
+            CmsSendSimpleComment();
         }
     }
 }
