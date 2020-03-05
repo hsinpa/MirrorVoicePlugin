@@ -29,6 +29,10 @@ namespace VoiceNetwork
         [Command]
         public void CmsSendAudio(float[] raw_data)
         {
+
+            var byteArray = new byte[raw_data.Length * 4];
+            System.Buffer.BlockCopy(raw_data, 0, byteArray, 0, byteArray.Length);
+
             if (raw_data != null && raw_data.Length > 0)
                 RpcReceiveAudio(raw_data);
         }
@@ -59,7 +63,7 @@ namespace VoiceNetwork
 
         private void StartVoiceRecord()
         {
-            if (!isMicAvailable) return;
+            //if (!isMicAvailable) return;
 
             float[] data = new float[1024];
             micAudioSource.clip = Microphone.Start("Built-in Microphone", true, 1, 44100);
@@ -70,8 +74,6 @@ namespace VoiceNetwork
 
         private void Update()
         {
-            if (!isLocalPlayer) return;
-
             StartVoiceRecord();
             CmsSendSimpleComment();
         }
