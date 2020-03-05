@@ -22,7 +22,6 @@ namespace VoiceNetwork
             playoutAudioSource.clip = AudioClip.Create("Receiver", 1024, 1, 44100, false);
 
             string[] devices = Microphone.devices;
-            if (devices == null || devices.Length <= 0) return;
 
             isMicAvailable = (devices != null && devices.Length > 0);
         }
@@ -37,6 +36,8 @@ namespace VoiceNetwork
         [ClientRpc]
         public void RpcReceiveAudio(float[] raw_data)
         {
+            Debug.Log(raw_data.Length);
+
             playoutAudioSource.clip.SetData(raw_data, 0);
             playoutAudioSource.Play();
         }

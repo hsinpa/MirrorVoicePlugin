@@ -37,7 +37,7 @@ namespace VoiceNetwork {
 
         public void ConnectServer(string p_ip_address = "")
         {
-            if (!string.IsNullOrEmpty(p_ip_address))
+            if (string.IsNullOrEmpty(p_ip_address))
                 p_ip_address = targetIP;
 
             _networkManager.networkAddress = p_ip_address;
