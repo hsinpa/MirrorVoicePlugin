@@ -45,8 +45,7 @@ namespace VoiceNetwork
         [Command]
         public void CmsSendSimpleComment()
         {
-
-            RpcReceiveHello("Hello from" + ((netIdentity.isServer) ? "Server" : "Client"));
+            RpcReceiveHello("Hello from" + ((netIdentity.netId)));
         }
 
         [ClientRpc]
