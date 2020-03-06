@@ -27,8 +27,6 @@ namespace VoiceNetwork
                 microphoneName = devices[0];
                 micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 44100);
             }
-
-            isMicAvailable = (devices != null && devices.Length > 0);
         }
 
         [Command]
