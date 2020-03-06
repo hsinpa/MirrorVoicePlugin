@@ -75,7 +75,7 @@ namespace VoiceNetwork
         private void StartVoiceRecord()
         {
             if (micAudioSource.clip != null) {
-                float[] data = new float[22050];
+                float[] data = new float[2048];
                 int index = Microphone.GetPosition(microphoneName);
                 micAudioSource.clip.GetData(data, index);
 
