@@ -19,13 +19,13 @@ namespace VoiceNetwork
         public override void OnStartClient()
         {
             base.OnStartClient();
-            playoutAudioSource.clip = AudioClip.Create("Receiver", 1024, 1, 44100, false);
+            playoutAudioSource.clip = AudioClip.Create("Receiver", 2048, 1, 22050, false);
 
             string[] devices = Microphone.devices;
 
             if (devices != null && devices.Length > 0) {
                 microphoneName = devices[0];
-                micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 44100);
+                micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 22050);
             }
         }
 
@@ -44,6 +44,8 @@ namespace VoiceNetwork
         public void RpcReceiveAudio(byte[] raw_data)
         {
             if (!isLocalPlayer) {
+
+                Debug.Log(raw_data.Length);
                 var floatArray2 = new float[raw_data.Length / 4];
                 System.Buffer.BlockCopy(raw_data, 0, floatArray2, 0, raw_data.Length);
 
@@ -70,8 +72,9 @@ namespace VoiceNetwork
         private void StartVoiceRecord()
         {
             if (micAudioSource.clip != null) {
-                float[] data = new float[1024];
-                micAudioSource.clip.GetData(data, 0);
+                float[] data = new float[2048];
+                int microphoneIndex = Microphone.GetPosition(microphoneName);
+                micAudioSource.clip.GetData(data, microphoneIndex);
 
                 CmsSendAudio(data);
             }
