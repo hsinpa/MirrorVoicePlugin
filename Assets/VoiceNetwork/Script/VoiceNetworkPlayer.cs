@@ -26,6 +26,8 @@ namespace VoiceNetwork
             if (devices != null && devices.Length > 0) {
                 microphoneName = devices[0];
                 micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 22050);
+                micAudioSource.loop = true;
+                micAudioSource.Play();
             }
         }
 
@@ -44,13 +46,12 @@ namespace VoiceNetwork
         public void RpcReceiveAudio(byte[] raw_data)
         {
             if (!isLocalPlayer) {
-
-                Debug.Log(raw_data.Length);
                 var floatArray2 = new float[raw_data.Length / 4];
                 System.Buffer.BlockCopy(raw_data, 0, floatArray2, 0, raw_data.Length);
 
                 playoutAudioSource.clip.SetData(floatArray2, 0);
                 playoutAudioSource.Play();
+                playoutAudioSource.loop = true;
             }
         }
 
@@ -72,9 +73,9 @@ namespace VoiceNetwork
         private void StartVoiceRecord()
         {
             if (micAudioSource.clip != null) {
-                float[] data = new float[2048];
-                int microphoneIndex = Microphone.GetPosition(microphoneName);
-                micAudioSource.clip.GetData(data, microphoneIndex);
+                float[] data = new float[22050];
+                int index = Microphone.GetPosition(microphoneName);
+                micAudioSource.clip.GetData(data, index);
 
                 CmsSendAudio(data);
             }
@@ -83,7 +84,6 @@ namespace VoiceNetwork
         private void Update()
         {
             StartVoiceRecord();
-            CmsSendSimpleComment();
         }
     }
 }
