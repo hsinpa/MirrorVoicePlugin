@@ -23,10 +23,12 @@ namespace VoiceNetwork
 
             string[] devices = Microphone.devices;
 
-            if (devices != null && devices.Length > 0) {
+            if (devices != null && devices.Length > 0)
+            {
                 microphoneName = devices[0];
                 micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 22050);
                 micAudioSource.loop = true;
+                micAudioSource.mute = true;
                 micAudioSource.Play();
             }
         }
