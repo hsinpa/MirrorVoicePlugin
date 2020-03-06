@@ -1455,7 +1455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1866a90062e70d478bc0fba67263949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetIP: 
+  targetIP: 192.168.1.102
   voicePlayerPrefab: {fileID: 3322157637296555788, guid: b619f47430d65c14b81e8505eb7ff83d,
     type: 3}
 --- !u!1 &2145844586
