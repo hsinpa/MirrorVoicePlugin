@@ -18,7 +18,7 @@ namespace VoiceNetwork {
         public override void OnStartServer()
         {
             base.OnStartServer();
-            //NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
+            NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
         }
 
         #region Public API
@@ -53,8 +53,8 @@ namespace VoiceNetwork {
         public override void OnClientConnect(NetworkConnection conn)
         {
             base.OnClientConnect(conn);
-
-            Debug.Log("Player is connect : " + conn.identity.netId.ToString());
+            if (conn.identity != null)
+                Debug.Log("Player is connect : " + conn.identity.netId);
         }
 
         #endregion
