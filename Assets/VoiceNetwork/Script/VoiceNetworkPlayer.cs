@@ -47,14 +47,14 @@ namespace VoiceNetwork
         [ClientRpc]
         public void RpcReceiveAudio(byte[] raw_data)
         {
-            if (!isLocalPlayer) {
+            //if (!isLocalPlayer) {
                 var floatArray2 = new float[raw_data.Length / 4];
                 System.Buffer.BlockCopy(raw_data, 0, floatArray2, 0, raw_data.Length);
 
                 playoutAudioSource.clip.SetData(floatArray2, 0);
                 playoutAudioSource.Play();
                 playoutAudioSource.loop = true;
-            }
+            //}
         }
 
         [Command]
@@ -77,6 +77,7 @@ namespace VoiceNetwork
             if (micAudioSource.clip != null) {
                 float[] data = new float[2048];
                 int index = Microphone.GetPosition(microphoneName);
+
                 micAudioSource.clip.GetData(data, index);
 
                 CmsSendAudio(data);

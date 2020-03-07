@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 namespace VoiceNetwork {
-
-    [RequireComponent(typeof(NetworkManager))]
-    public class VoiceNetworkManager : MonoBehaviour
+    public class VoiceNetworkManager : NetworkManager
     {
         [SerializeField]
         private string targetIP;
@@ -13,25 +11,19 @@ namespace VoiceNetwork {
         [SerializeField]
         private GameObject voicePlayerPrefab;
 
-        private NetworkManager _networkManager;
+        private Dictionary<string, VoiceNetworkPlayer> voicePlayerDict = new Dictionary<string, VoiceNetworkPlayer>();
 
         private bool isServer = false;
 
-        private void Awake()
+        public override void OnStartServer()
         {
-            _networkManager = GetComponent<NetworkManager>();
-
-            NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
-        }
-
-        private class CreatePlayerMessage : MessageBase
-        {
-            public string name;
+            base.OnStartServer();
+            //NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
         }
 
         #region Public API
-        public void StartServer() {
-            _networkManager.StartHost();
+        public void StartTheServer() {
+            StartHost();
             isServer = true;
         }
 
@@ -40,23 +32,31 @@ namespace VoiceNetwork {
             if (string.IsNullOrEmpty(p_ip_address))
                 p_ip_address = targetIP;
 
-            _networkManager.networkAddress = p_ip_address;
+            networkAddress = p_ip_address;
 
-            _networkManager.StartClient();
+            StartClient();
 
             isServer = false;
         }
 
         public void Leave() {
-            if (!_networkManager.isNetworkActive) return;
+            if (!isNetworkActive) return;
 
             if (isServer)
-                _networkManager.StopServer();
+                StopServer();
             else
-                _networkManager.StopClient();
+                StopClient();
 
             isServer = false;
         }
+
+        public override void OnClientConnect(NetworkConnection conn)
+        {
+            base.OnClientConnect(conn);
+
+            Debug.Log("Player is connect : " + conn.identity.netId.ToString());
+        }
+
         #endregion
 
         #region Private API
@@ -70,6 +70,17 @@ namespace VoiceNetwork {
             NetworkServer.AddPlayerForConnection(connection, playergo);
         }
         #endregion
+
+        public class VoiceByteMsg : MessageBase
+        {
+            public byte[] voiceBytes;
+            public string player_id;
+        }
+
+        private class CreatePlayerMessage : MessageBase
+        {
+            public string name;
+        }
     }
 
 }
