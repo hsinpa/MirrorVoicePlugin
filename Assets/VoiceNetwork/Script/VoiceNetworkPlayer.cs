@@ -86,7 +86,10 @@ namespace VoiceNetwork
 
         private void Update()
         {
-            StartVoiceRecord();
+            if (isLocalPlayer)
+            {
+                StartVoiceRecord();
+            }
         }
     }
 }
