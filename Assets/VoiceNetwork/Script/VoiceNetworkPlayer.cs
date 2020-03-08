@@ -80,7 +80,7 @@ namespace VoiceNetwork
                 var byteArray = new byte[data.Length * 4];
                 System.Buffer.BlockCopy(data, 0, byteArray, 0, byteArray.Length);
 
-                CmsSendAudio(byteArray);
+                CmdSendAudio(byteArray);
             }
         }
 
