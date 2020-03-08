@@ -56,10 +56,16 @@ namespace VoiceNetwork
         [ClientRpc]
         public void RpcReceiveAudio(byte[] raw_data)
         {
-            if (!isLocalPlayer) {
-                var floatArray2 = new float[raw_data.Length / 4];
-                System.Buffer.BlockCopy(raw_data, 0, floatArray2, 0, raw_data.Length);
+            var floatArray2 = new float[raw_data.Length / 4];
+            System.Buffer.BlockCopy(raw_data, 0, floatArray2, 0, raw_data.Length);
+
+            if (isLocalPlayer)
+            {
                 Debug.Log(floatArray2[1000]);
+            }
+
+            if (!isLocalPlayer) {
+                //Debug.Log(floatArray2[1000]);
                 playoutAudioSource.clip.SetData(floatArray2, 0);
                 playoutAudioSource.Play();
                 playoutAudioSource.loop = true;
