@@ -40,7 +40,7 @@ namespace VoiceNetwork {
                 id = reader.ReadUInt32();
 
                 if (voiceData != null)
-                    voiceData = reader.ReadBytes(voiceData, 2048 * 4);
+                    voiceData = reader.ReadBytesAndSize();
             }
 
             public override void Serialize(NetworkWriter writer)
@@ -50,7 +50,7 @@ namespace VoiceNetwork {
                 writer.WriteUInt32(id);
 
                 if (voiceData != null)
-                    writer.WriteBytes(voiceData, 0, 2048 * 4);
+                    writer.WriteBytesAndSize(voiceData);
             }
 
             public byte[] voiceData;
@@ -91,6 +91,7 @@ namespace VoiceNetwork {
         private void OnServerVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
         {
             Debug.Log("voiceMsg.id " + voiceMessage.id);
+            Debug.Log("voiceMsg.id " + voiceMessage.voiceData.Length);
 
             NetworkServer.SendToAll<VoiceMessage>(voiceMessage);
         }
