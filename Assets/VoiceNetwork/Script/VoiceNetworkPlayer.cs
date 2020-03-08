@@ -16,9 +16,17 @@ namespace VoiceNetwork
 
         private string microphoneName = "";
 
+        public static string Getname(uint netID)
+        {
+            return "VoicePlayer " + netID;
+        }
+
         public override void OnStartClient()
         {
             base.OnStartClient();
+
+            this.gameObject.name = Getname(this.netId);
+
             playoutAudioSource.clip = AudioClip.Create("Receiver", 2048, 1, 22050, false);
 
             string[] devices = Microphone.devices;
@@ -40,8 +48,13 @@ namespace VoiceNetwork
             var byteArray = new byte[raw_data.Length * 4];
             System.Buffer.BlockCopy(raw_data, 0, byteArray, 0, byteArray.Length);
 
-            if (raw_data != null && raw_data.Length > 0)
-                RpcReceiveAudio(byteArray);
+            if (raw_data != null && raw_data.Length > 0) {
+                VoiceNetworkManager.VoiceMessage voiceMsg = new VoiceNetworkManager.VoiceMessage();
+                voiceMsg.id = this.netId.ToString();
+                voiceMsg.voiceData = byteArray;
+                NetworkClient.Send<VoiceNetworkManager.VoiceMessage>(voiceMsg);
+                //RpcReceiveAudio(byteArray);
+            }
         }
 
         [ClientRpc]
@@ -54,21 +67,6 @@ namespace VoiceNetwork
                 playoutAudioSource.clip.SetData(floatArray2, 0);
                 playoutAudioSource.Play();
                 playoutAudioSource.loop = true;
-            }
-        }
-
-        [Command]
-        public void CmsSendSimpleComment()
-        {
-            RpcReceiveHello("Hello from" + ((netIdentity.netId)));
-        }
-
-        [ClientRpc]
-        public void RpcReceiveHello(string SayHello)
-        {
-            if (!isLocalPlayer)
-            {
-                Debug.Log(SayHello);
             }
         }
 

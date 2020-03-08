@@ -15,18 +15,27 @@ namespace VoiceNetwork {
 
         private NetworkManager _networkManager;
 
+        private Dictionary<string, VoiceMessage> voiceDict = new Dictionary<string, VoiceMessage>();
+
         private bool isServer = false;
 
         private void Awake()
         {
             _networkManager = GetComponent<NetworkManager>();
 
-            NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
+            NetworkServer.RegisterHandler<VoiceMessage>(OnServerVoiceMessage);
+            NetworkClient.RegisterHandler<VoiceMessage>(OnClientVoiceMessage);
         }
 
         private class CreatePlayerMessage : MessageBase
         {
             public string name;
+        }
+
+        public class VoiceMessage : MessageBase
+        {
+            public byte[] voiceData;
+            public string id;
         }
 
         #region Public API
@@ -60,14 +69,15 @@ namespace VoiceNetwork {
         #endregion
 
         #region Private API
-        private void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
+        private void OnServerVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
         {
-            // create a gameobject using the name supplied by client
-            GameObject playergo = Instantiate(voicePlayerPrefab);
-            playergo.GetComponent<VoiceNetworkPlayer>().name = createPlayerMessage.name;
+            NetworkServer.SendToAll<VoiceMessage>(voiceMessage);
+        }
 
-            // set it as the player
-            NetworkServer.AddPlayerForConnection(connection, playergo);
+        private void OnClientVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
+        {
+            VoiceNetworkPlayer voicePlayer = connection.identity.gameObject.GetComponent<VoiceNetworkPlayer>();
+            voicePlayer.RpcReceiveAudio(voiceMessage.voiceData);
         }
         #endregion
     }
