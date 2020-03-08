@@ -34,9 +34,20 @@ namespace VoiceNetwork {
 
         public class VoiceMessage : MessageBase
         {
+
+            public byte[] voiceData;
+            public uint id;
+
+            public VoiceMessage() { }
+
+            public VoiceMessage(byte[] v, uint id)
+            {
+                this.voiceData = v;
+                this.id = id;
+            }
+
             public override void Deserialize(NetworkReader reader)
             {
-                base.Deserialize(reader);
                 id = reader.ReadUInt32();
 
                 if (voiceData != null)
@@ -45,16 +56,11 @@ namespace VoiceNetwork {
 
             public override void Serialize(NetworkWriter writer)
             {
-                base.Serialize(writer);
-
                 writer.WriteUInt32(id);
 
                 if (voiceData != null)
                     writer.WriteBytesAndSize(voiceData);
             }
-
-            public byte[] voiceData;
-            public uint id;
         }
 
         #region Public API
@@ -98,8 +104,7 @@ namespace VoiceNetwork {
 
         private void OnClientVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
         {
-            if (voiceMessage.voiceData == null) return;
-            Debug.Log("voiceMessage.id " + voiceMessage.voiceData.Length);
+            Debug.Log("voiceMessage.id " + voiceMessage.id);
             //VoiceNetworkPlayer voicePlayer = connection.identity.gameObject.GetComponent<VoiceNetworkPlayer>();
             //voicePlayer.RpcReceiveAudio(voiceMessage.voiceData);
         }
