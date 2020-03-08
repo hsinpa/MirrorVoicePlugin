@@ -50,7 +50,7 @@ namespace VoiceNetwork
 
             if (raw_data != null && raw_data.Length > 0) {
                 VoiceNetworkManager.VoiceMessage voiceMsg = new VoiceNetworkManager.VoiceMessage();
-                voiceMsg.id = this.netId.ToString();
+                voiceMsg.id = this.netId;
                 voiceMsg.voiceData = byteArray;
 
                 NetworkClient.Send<VoiceNetworkManager.VoiceMessage>(voiceMsg);
