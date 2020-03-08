@@ -35,7 +35,7 @@ namespace VoiceNetwork {
         public class VoiceMessage : MessageBase
         {
             public byte[] voiceData;
-            public string id;
+            public uint id;
         }
 
         #region Public API
