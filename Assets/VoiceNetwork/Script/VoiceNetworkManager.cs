@@ -34,6 +34,18 @@ namespace VoiceNetwork {
 
         public class VoiceMessage : MessageBase
         {
+            public override void Deserialize(NetworkReader reader)
+            {
+                id = reader.ReadUInt32();
+                voiceData = reader.ReadBytes(voiceData, 2048 * 4);
+            }
+
+            public override void Serialize(NetworkWriter writer)
+            {
+                writer.WriteUInt32(id);
+                writer.WriteBytes(voiceData, 0, 2048 * 4);
+            }
+
             public byte[] voiceData;
             public uint id;
         }
