@@ -49,9 +49,10 @@ namespace VoiceNetwork
             System.Buffer.BlockCopy(raw_data, 0, byteArray, 0, byteArray.Length);
 
             if (raw_data != null && raw_data.Length > 0) {
-                VoiceNetworkManager.VoiceMessage voiceMsg = new VoiceNetworkManager.VoiceMessage();
-                voiceMsg.id = this.netId;
-                voiceMsg.voiceData = byteArray;
+                VoiceNetworkManager.VoiceMessage voiceMsg = new VoiceNetworkManager.VoiceMessage() {
+                    id = this.netId,
+                    voiceData = byteArray
+                };
 
                 NetworkClient.Send<VoiceNetworkManager.VoiceMessage>(voiceMsg);
                 //RpcReceiveAudio(byteArray);
