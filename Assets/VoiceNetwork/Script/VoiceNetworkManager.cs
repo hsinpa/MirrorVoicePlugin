@@ -71,13 +71,17 @@ namespace VoiceNetwork {
         #region Private API
         private void OnServerVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
         {
+            Debug.Log("voiceMsg.id " + voiceMessage.id);
+
             NetworkServer.SendToAll<VoiceMessage>(voiceMessage);
         }
 
         private void OnClientVoiceMessage(NetworkConnection connection, VoiceMessage voiceMessage)
         {
-            VoiceNetworkPlayer voicePlayer = connection.identity.gameObject.GetComponent<VoiceNetworkPlayer>();
-            voicePlayer.RpcReceiveAudio(voiceMessage.voiceData);
+            if (voiceMessage.voiceData == null) return;
+            Debug.Log("voiceMessage.id " + voiceMessage.voiceData.Length);
+            //VoiceNetworkPlayer voicePlayer = connection.identity.gameObject.GetComponent<VoiceNetworkPlayer>();
+            //voicePlayer.RpcReceiveAudio(voiceMessage.voiceData);
         }
         #endregion
     }

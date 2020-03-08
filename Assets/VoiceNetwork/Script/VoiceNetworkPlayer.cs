@@ -52,6 +52,7 @@ namespace VoiceNetwork
                 VoiceNetworkManager.VoiceMessage voiceMsg = new VoiceNetworkManager.VoiceMessage();
                 voiceMsg.id = this.netId.ToString();
                 voiceMsg.voiceData = byteArray;
+
                 NetworkClient.Send<VoiceNetworkManager.VoiceMessage>(voiceMsg);
                 //RpcReceiveAudio(byteArray);
             }
