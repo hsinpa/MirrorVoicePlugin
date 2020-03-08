@@ -34,7 +34,7 @@ namespace VoiceNetwork
             if (devices != null && devices.Length > 0)
             {
                 microphoneName = devices[0];
-                micAudioSource.clip = Microphone.Start(microphoneName, true, 1, 22050);
+                micAudioSource.clip = Microphone.Start(null, true, 1, 22050);
                 micAudioSource.loop = true;
                 micAudioSource.mute = true;
                 micAudioSource.Play();
@@ -70,7 +70,7 @@ namespace VoiceNetwork
         {
             if (micAudioSource.clip != null) {
                 float[] data = new float[2048];
-                int index = Microphone.GetPosition(microphoneName);
+                int index = Microphone.GetPosition(null);
                 micAudioSource.clip.GetData(data, index);
 
                 var byteArray = new byte[data.Length * 4];
