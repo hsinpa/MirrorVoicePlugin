@@ -42,7 +42,7 @@ namespace VoiceNetwork
         }
 
         [Command]
-        public void CmsSendAudio(byte[] byteArray)
+        public void CmdSendAudio(byte[] byteArray)
         {
 
             if (byteArray != null && byteArray.Length > 0) {
